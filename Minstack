@@ -4,7 +4,7 @@
 
 typedef struct Node {
 int value;
-int min; // Store the minimum value at this point
+int min; 
 struct Node* next;
 } Node;
 
@@ -46,7 +46,7 @@ free(temp);
 int top(MinStack* stack) {
 if (stack->top == NULL) {
 printf("Stack is empty.\n");
-return INT_MIN; // Return a sentinel value
+return INT_MIN; 
 }
 return stack->top->value;
 }
@@ -54,7 +54,7 @@ return stack->top->value;
 int getMin(MinStack* stack) {
 if (stack->top == NULL) {
 printf("Stack is empty.\n");
-return INT_MIN; // Return a sentinel value
+return INT_MIN;
 }
 return stack->top->min;
 }
