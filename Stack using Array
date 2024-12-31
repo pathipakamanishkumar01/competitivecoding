@@ -34,7 +34,7 @@ void push(struct Stack* stack, int value) {
 int pop(struct Stack* stack) {
     if (isEmpty(stack)) {
         printf("Stack Underflow! Cannot pop element\n");
-        return -1;  // Return -1 to indicate an error
+        return -1;
     } else {
         return stack->arr[stack->top--];
     }
@@ -62,7 +62,7 @@ void display(struct Stack* stack) {
 }
 
 int main() {
-    struct Stack stack;  // Declare a stack
+    struct Stack stack;
     initializeStack(&stack); 
 
     push(&stack, 10);
