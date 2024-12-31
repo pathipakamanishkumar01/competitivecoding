@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+typedef struct Node {
+int value;
+int min; // Store the minimum value at this point
+struct Node* next;
+} Node;
+
+typedef struct {
+Node* top;
+} MinStack;
+
+MinStack* createMinStack() {
+MinStack* stack = (MinStack*)malloc(sizeof(MinStack));
+stack->top = NULL;
+return stack;
+}
+
+void push(MinStack* stack, int value) {
+Node* newNode = (Node*)malloc(sizeof(Node));
+newNode->value = value;
+
+if (stack->top == NULL) {
+    newNode->min = value;
+} else {
+    newNode->min = (value < stack->top->min) ? value : stack->top->min;
+}
+
+newNode->next = stack->top;
+stack->top = newNode;
+}
+
+void pop(MinStack* stack) {
+if (stack->top == NULL) {
+printf("Stack underflow.\n");
+return;
+}
+
+Node* temp = stack->top;
+stack->top = stack->top->next;
+free(temp);
+}
+
+int top(MinStack* stack) {
+if (stack->top == NULL) {
+printf("Stack is empty.\n");
+return INT_MIN; // Return a sentinel value
+}
+return stack->top->value;
+}
+
+int getMin(MinStack* stack) {
+if (stack->top == NULL) {
+printf("Stack is empty.\n");
+return INT_MIN; // Return a sentinel value
+}
+return stack->top->min;
+}
+
+void freeMinStack(MinStack* stack) {
+while (stack->top != NULL) {
+pop(stack);
+}
+free(stack);
+}
+
+int main() {
+MinStack* stack = createMinStack();
+
+push(stack, 5);
+push(stack, 3);
+push(stack, 7);
+push(stack, 2);
+
+printf("Top element: %d\n", top(stack));
+printf("Minimum element: %d\n", getMin(stack));
+
+pop(stack);
+printf("After popping:\n");
+printf("Top element: %d\n", top(stack));
+printf("Minimum element: %d\n", getMin(stack));
+
+freeMinStack(stack);
+return 0;
+}
