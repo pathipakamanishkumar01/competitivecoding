@@ -1,82 +1,86 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
-int data;
-struct Node* next;
-} Node;
+struct Node {
+    int data;
+    struct Node* next;
+};
 
-Node* createNode(int data) {
-Node* newNode = (Node*)malloc(sizeof(Node));
-if (!newNode) {
-printf("Memory allocation failed.\n");
-exit(1);
-}
-newNode->data = data;
-newNode->next = NULL;
-return newNode;
-}
+struct Stack {
+    struct Node* top;
+};
 
-is empty
-int isEmpty(Node* top) {
-return top == NULL;
+struct Stack* createStack() {
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+    stack->top = NULL;
+    return stack;
 }
 
-void push(Node** top, int data) {
-Node* newNode = createNode(data);
-newNode->next = *top;
-*top = newNode;
-printf("Pushed %d onto the stack.\n", data);
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
 }
 
-int pop(Node** top) {
-if (isEmpty(top)) {
-printf("Stack underflow. Cannot pop.\n");
-return -1;
-}
-Node temp = *top;
-int poppedData = temp->data;
-*top = (*top)->next;
-free(temp);
-return poppedData;
+int isEmpty(struct Stack* stack) {
+    return stack->top == NULL;
 }
 
-int peek(Node* top) {
-if (isEmpty(top)) {
-printf("Stack is empty.\n");
-return -1;
-}
-return top->data;
+void push(struct Stack* stack, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = stack->top;
+    stack->top = newNode;
+    printf("%d pushed to stack\n", data);
 }
 
-void display(Node* top) {
-if (isEmpty(top)) {
-printf("Stack is empty.\n");
-return;
+int pop(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack underflow\n");
+        return -1;
+    }
+    struct Node* temp = stack->top;
+    int poppedData = temp->data;
+    stack->top = stack->top->next;
+    free(temp);
+    return poppedData;
 }
-printf("Stack elements:\n");
-Node* current = top;
-while (current) {
-printf("%d\n", current->data);
-current = current->next;
-}
+
+void display(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack is empty\n");
+        return;
+    }
+    struct Node* current = stack->top;
+    printf("Stack elements: ");
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
 }
 
 int main() {
-Node* stack = NULL;
+    struct Stack* stack = createStack();
 
-push(&stack, 10);
-push(&stack, 20);
-push(&stack, 30);
+    push(stack, 10);
+    push(stack, 20);
+    push(stack, 30);
+    
+    display(stack);
 
-printf("Top element: %d\n", peek(stack));
+    printf("%d popped from stack\n", pop(stack));
+    display(stack);
 
-printf("Popped element: %d\n", pop(&stack));
-printf("Popped element: %d\n", pop(&stack));
+    printf("%d popped from stack\n", pop(stack));
+    display(stack);
 
-display(stack);
+    printf("%d popped from stack\n", pop(stack));
+    display(stack);
 
-printf("Popped element: %d\n", pop(&stack));
-printf("Popped element: %d\n", pop(&stack)); 
-return 0;
+    pop(stack);
+
+    free(stack);
+
+    return 0;
 }
